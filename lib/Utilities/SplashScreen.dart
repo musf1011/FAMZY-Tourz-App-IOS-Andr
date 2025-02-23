@@ -1,4 +1,3 @@
-import 'package:famzy_tourz_app/UI/Auth/WelcomeScreen.dart';
 import 'package:famzy_tourz_app/Utilities/Splash_Services/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

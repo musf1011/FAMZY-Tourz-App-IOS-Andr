@@ -79,7 +79,7 @@ class TourPackages extends StatelessWidget {
                               borderRadius: BorderRadius.circular(10),
                               // color: Color.fromARGB(255, 0, 57, 2),
                               color: index != indexDots
-                                  ? Color.fromARGB(150, 0, 30, 0)
+                                  ? Color.fromARGB(150, 0, 100, 0)
                                   : Color.fromARGB(255, 0, 57, 2)),
                         ),
                       )),

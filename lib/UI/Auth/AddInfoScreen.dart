@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:famzy_tourz_app/UI/MainScreens/MainScreen.dart';
 import 'package:famzy_tourz_app/Utilities/CustElevButt.dart';
 import 'package:famzy_tourz_app/Utilities/CustTFField.dart';
+import 'package:famzy_tourz_app/Utilities/ToastPopUp.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -20,6 +21,7 @@ class _AdditionalInfoScreenState extends State<AdditionalInfoScreen> {
   final _formKey = GlobalKey<FormState>();
   String? _gender;
   int? _age;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -75,20 +77,20 @@ class _AdditionalInfoScreenState extends State<AdditionalInfoScreen> {
                               if (value == null || value.isEmpty) {
                                 return 'Please enter your age';
                               }
-                              final age = int.tryParse(value);
-                              if (age == null || age <= 0 || age > 130) {
+                              _age = int.tryParse(value);
+                              if (_age == null || _age! <= 0 || _age! > 130) {
                                 return 'Invalid age, it should be between 13 and 130';
                               }
-                              if (age < 13) {
+                              if (_age! < 13) {
                                 return 'You are underage'; // Not eligible
                               }
                               return null;
                             },
                             onSaved: (value) {
-                              int age = int.tryParse(value!) ??
+                              _age = int.tryParse(value!) ??
                                   0; // Parse and set 0 if invalid
-                              if (age < 1 || age > 130) {
-                                age = 0; // Enforce 0 for invalid ranges
+                              if (_age! < 1 || _age! > 130) {
+                                _age = 0; // Enforce 0 for invalid ranges
                               }
                             },
                             keyboardType: TextInputType.number,
@@ -162,25 +164,41 @@ class _AdditionalInfoScreenState extends State<AdditionalInfoScreen> {
                       )),
                   SizedBox(height: .1.sh),
                   CustomElevatedButton(
-                    child: Text('Submit'),
-                    onPressed: () async {
-                      if (_formKey.currentState?.validate() ?? false) {
-                        await FirebaseFirestore.instance
-                            .collection('UserDetails')
-                            .doc(widget.user.uid)
-                            .set({
-                          'gender': _gender,
-                          'age': _age,
-                        }, SetOptions(merge: true));
+                      child: isLoading
+                          ? const CircularProgressIndicator(
+                              color: Colors.white,
+                            )
+                          : Text('Submit'),
+                      onPressed: () async {
+                        setState(() {
+                          isLoading = true;
+                        });
+                        if (_formKey.currentState!.validate()) {
+                          FirebaseFirestore.instance
+                              .collection('UserDetails')
+                              .doc(widget.user.uid)
+                              .set({
+                            'gender': _gender,
+                            'age': _age,
+                          }, SetOptions(merge: true));
+                          ToastPopUp()
+                              .toastPopUp('Sign Up Successful', Colors.black);
 
-                        // move to  main scree
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => MainScreen()));
-                      }
-                    },
-                  )
+                          // move to  main scree
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MainScreen()));
+                          setState(() {
+                            isLoading = false;
+                          });
+                          _formKey.currentState!.reset();
+                        } else {
+                          setState(() {
+                            isLoading = false;
+                          });
+                        }
+                      })
                 ],
               ),
             ),

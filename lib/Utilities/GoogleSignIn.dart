@@ -34,12 +34,8 @@ class AuthService {
       if (user != null) {
         //check if user is new
         if (userCredential.additionalUserInfo?.isNewUser ?? false) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => AdditionalInfoScreen(user: user)),
-          );
           //store userinfo in firestore
+          Text('User is new');
           await fStore.collection('UserDetails').doc(user.uid).set({
             'userId': user.uid,
             'fullName': user.displayName,
@@ -49,6 +45,12 @@ class AuthService {
             'age': null,
             'createdAt': FieldValue.serverTimestamp(),
           });
+          Text('User info stored in firestore');
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => AdditionalInfoScreen(user: user)),
+          );
         } else {
           Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (context) => MainScreen()));

@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class FeedScreen extends StatefulWidget {
   const FeedScreen({super.key});
@@ -19,9 +21,14 @@ class _FeedScreenState extends State<FeedScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'FAMZY Instants',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        title: Text(
+          "FAMZY Instants",
+          textAlign: TextAlign.center,
+          style: GoogleFonts.playfairDisplay(
+            fontWeight: FontWeight.bold,
+            fontSize: 25.sp,
+            color: Colors.white,
+          ),
         ),
         centerTitle: true,
         backgroundColor: const Color.fromARGB(255, 0, 57, 2),
@@ -35,7 +42,10 @@ class _FeedScreenState extends State<FeedScreen> {
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+                child: CircularProgressIndicator(
+              color: Color.fromARGB(255, 0, 57, 2),
+            ));
           }
 
           if (snapshot.hasError) {

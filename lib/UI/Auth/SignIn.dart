@@ -17,13 +17,7 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
-  TextEditingController emailcont = TextEditingController();
-
-  TextEditingController passcont = TextEditingController();
-
   final GlobalKey<FormState> keyOfForm = GlobalKey<FormState>();
-
-  int cred = 1;
 
   bool isLoading = false;
 
@@ -102,15 +96,14 @@ class _SignInState extends State<SignIn> {
                               hint: 'you@gmail.com',
                               keyboardType: TextInputType.emailAddress,
                               onSaved: (value) {
-                                setState(() {
-                                  g = value;
-                                });
+                                g = value;
                               },
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return 'Gmail field should be filled';
+                                } else {
+                                  return null;
                                 }
-                                return null;
                               },
                             ),
                             SizedBox(height: .05.sh),
@@ -168,10 +161,12 @@ class _SignInState extends State<SignIn> {
                         style: TextStyle(fontSize: 18.sp, color: Colors.white),
                       ),
                 onPressed: () async {
-                  setState(() {
-                    isLoading = true;
-                  });
                   if (keyOfForm.currentState!.validate()) {
+                    setState(() {
+                      isLoading = true;
+                    });
+                    keyOfForm.currentState!.save(); // Save form data
+
                     authentic
                         .signInWithEmailAndPassword(
                       email: g!.trim(),
@@ -182,9 +177,9 @@ class _SignInState extends State<SignIn> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => const MainScreen()));
-                      setState(() {
-                        isLoading = false;
-                      });
+
+                      ToastPopUp()
+                          .toastPopUp('Sign In Successful', Colors.black);
                       keyOfForm.currentState!.reset();
                     }).onError((Error, Value) {
                       ToastPopUp().toastPopUp(Error.toString(), Colors.black);
