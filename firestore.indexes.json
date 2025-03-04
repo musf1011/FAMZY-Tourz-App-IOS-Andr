@@ -1,0 +1,12 @@
+{
+    "indexes": [
+      {
+        "collectionGroup": "chat",
+        "queryScope": "COLLECTION",
+        "fields": [
+          {"fieldPath": "isAI", "order": "DESCENDING"},
+          {"fieldPath": "time", "order": "DESCENDING"}
+        ]
+      }
+    ]
+  }

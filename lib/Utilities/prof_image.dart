@@ -20,7 +20,7 @@ Widget profileImage({required String profilePic, required double size}) {
             errorBuilder: (context, error, stackTrace) {
               return Icon(
                 Icons.error,
-                size: size * 0.5.sp,
+                size: size * 0.48.sp,
                 color: Colors.red,
               );
             },
@@ -28,7 +28,7 @@ Widget profileImage({required String profilePic, required double size}) {
         )
       : Icon(
           Icons.person_4,
-          size: size * 0.5.sp,
+          size: size * 0.48.sp,
           color: Colors.grey,
         );
 }

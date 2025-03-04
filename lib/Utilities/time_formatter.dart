@@ -2,7 +2,7 @@ import 'package:intl/intl.dart';
 
 String getFormattedTime(int? timestampMs, {String format = 'HH:mm'}) {
   if (timestampMs == null || timestampMs <= 0) {
-    return "N/A"; // Handle null or invalid timestamps
+    return "Message"; // Handle null or invalid timestamps
   }
 
   // Convert milliseconds to DateTime

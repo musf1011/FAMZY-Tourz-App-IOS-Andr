@@ -480,6 +480,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
         FocusScope.of(context).unfocus(); // Unfocus the keyboard
       },
       child: Scaffold(
+        backgroundColor: Colors.grey[200],
         appBar: AppBar(
           title: Text(
             "\tInteracts",
@@ -492,85 +493,437 @@ class _ChatListScreenState extends State<ChatListScreen> {
           ),
           backgroundColor: const Color.fromARGB(255, 0, 57, 2),
         ),
-        body: Column(
-          children: [
-            // Search bar
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                style: TextStyle(color: Colors.black),
-                controller: searchController,
-                decoration: InputDecoration(
-                  hoverColor: const Color.fromARGB(255, 0, 57, 2),
-                  labelText: "Search by Name",
-                  labelStyle:
-                      TextStyle(color: const Color.fromARGB(255, 0, 57, 2)),
-                  prefixIcon: Icon(
-                    Icons.search,
-                    color: const Color.fromARGB(255, 0, 57, 2),
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(25),
-                    borderSide:
-                        BorderSide(color: const Color.fromARGB(255, 0, 57, 2)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    borderSide:
-                        BorderSide(color: const Color.fromARGB(255, 0, 57, 2)),
-                  ),
-                ),
-                onChanged: (value) {
-                  setState(() {
-                    searchQuery = value.trim();
-                  });
-                },
-              ),
+        body: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("asset/images/bg-chats.jpg"),
+              fit: BoxFit.cover,
             ),
+          ),
+          child: Column(
+            children: [
+              // Search bar
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextField(
+                  style: TextStyle(color: Colors.black),
+                  controller: searchController,
+                  decoration: InputDecoration(
+                    hoverColor: const Color.fromARGB(255, 0, 57, 2),
+                    labelText: "Search by Name",
+                    labelStyle:
+                        TextStyle(color: const Color.fromARGB(255, 0, 57, 2)),
+                    prefixIcon: Icon(
+                      Icons.search,
+                      color: const Color.fromARGB(255, 0, 57, 2),
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(25),
+                      borderSide: BorderSide(
+                          color: const Color.fromARGB(255, 0, 57, 2)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide(
+                          color: const Color.fromARGB(255, 0, 57, 2)),
+                    ),
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      searchQuery = value.trim();
+                    });
+                  },
+                ),
+              ),
 
-            // Chat List or Search Results
-            Expanded(
-              child: searchQuery == ""
-                  ? StreamBuilder<QuerySnapshot>(
-                      stream: FirebaseFirestore.instance
-                          .collection('chat')
-                          .snapshots(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
+              // Chat List or Search Results
+              Expanded(
+                child: searchQuery == ""
+                    ?
+
+                    // Add this to your search results list
+                    // StreamBuilder<QuerySnapshot>(
+                    //     stream: FirebaseFirestore.instance
+                    //         .collection('chat')
+                    //         .snapshots(),
+                    //     builder: (context, snapshot) {
+                    //       if (snapshot.hasData) {
+                    //         try {
+                    //           var chatlist = snapshot.data!.docs.where((element) {
+                    //             final data =
+                    //                 element.data() as Map<String, dynamic>?;
+                    //             final chatId = data?['chatId'] as String?;
+                    //             final isAiChat =
+                    //                 chatId?.startsWith('ai-chat-') ?? false;
+
+                    //             return chatId != null &&
+                    //                 (chatId.contains(currentUserId) || isAiChat);
+                    //           }).toList();
+
+                    //           chatlist.sort((a, b) {
+                    //             int timestampA = a['time'] ??
+                    //                 0; // Use 0 as fallback for null timestamps
+                    //             int timestampB = b['time'] ??
+                    //                 0; // same as above, but for the other timestamp
+                    //             return timestampB.compareTo(
+                    //                 timestampA); // Sort in descending order (newest first)
+                    //           });
+
+                    //           return Column(
+                    //             children: [
+                    //               ListTile(
+
+                    //                 leading: CircleAvatar(
+                    //                   child: profileImage(
+                    //                     profilePic: chat['receiverPhoto'].isEmpty
+                    //                         ? 'https://example.com/default_ai.png'
+                    //                         : chat['receiverPhoto'],
+                    //                     size: 50.r,
+                    //                   ),
+                    //                 ),
+                    //                 title: Text('FAMZY AI'),
+                    //                 trailing: TextButton(
+                    //                   onPressed: () {
+                    //                     Navigator.push(
+                    //                       context,
+                    //                       MaterialPageRoute(
+                    //                         builder: (context) => SinglChatScreen(
+                    //                           chatId: 'ai-chat-$currentUserId',
+                    //                           receiverId: 'gemini-ai-id',
+                    //                           receiverName: 'Tourz AI Assistant',
+                    //                           receiverPhoto: '',
+                    //                         ),
+                    //                       ),
+                    //                     );
+                    //                   },
+                    //                   child: Text("Chat"),
+                    //                 ),
+                    //               ),
+                    //               ListView.builder(
+                    //                 itemCount: chatlist.length,
+                    //                 itemBuilder: (context, index) {
+                    //                   var chat = chatlist[index];
+                    //                   String chatId = chat['chatId'];
+
+                    //                   return FutureBuilder<int>(
+                    //                     future: _getUnseenMessageCount(chatId),
+                    //                     builder: (context, snapshot) {
+                    //                       int unseenCount = snapshot.data ?? 0;
+
+                    //                       return Card(
+                    //                         shape: RoundedRectangleBorder(
+                    //                           borderRadius:
+                    //                               BorderRadius.circular(5),
+                    //                         ),
+                    //                         color: Colors.white,
+                    //                         child: ListTile(
+                    //                           onTap: () async {
+                    //                             // Mark messages as seen when the chat is opened
+                    //                             await _markMessagesAsSeen(chatId);
+
+                    //                             Navigator.push(
+                    //                               context,
+                    //                               MaterialPageRoute(
+                    //                                 builder: (_) =>
+                    //                                     SinglChatScreen(
+                    //                                   receiverId:
+                    //                                       chat['receiverId'],
+                    //                                   receiverName:
+                    //                                       chat['receiverName'],
+                    //                                   receiverPhoto:
+                    //                                       chat['receiverPhoto'],
+                    //                                   chatId: chat['chatId'],
+                    //                                 ),
+                    //                               ),
+                    //                             );
+                    //                           },
+                    //                           leading: CircleAvatar(
+                    //                             child: profileImage(
+                    //                               profilePic:
+                    //                                   chat['receiverPhoto'],
+                    //                               size: 50.r,
+                    //                             ),
+                    //                           ),
+                    //                           title: Text(
+                    //                             chat['receiverName'],
+                    //                             style: TextStyle(fontSize: 18.sp),
+                    //                           ),
+                    //                           subtitle: Text(
+                    //                             chat['message'].length > 20
+                    //                                 ? chat['message']
+                    //                                         .substring(0, 20) +
+                    //                                     '...'
+                    //                                 : chat['message'],
+                    //                             style: TextStyle(
+                    //                               color: Colors.black
+                    //                                   .withOpacity(.6),
+                    //                             ),
+                    //                           ),
+                    //                           trailing: Column(
+                    //                             mainAxisAlignment:
+                    //                                 MainAxisAlignment.center,
+                    //                             children: [
+                    //                               if (unseenCount > 0)
+                    //                                 Container(
+                    //                                   padding:
+                    //                                       EdgeInsets.symmetric(
+                    //                                           horizontal: 6,
+                    //                                           vertical: 3),
+                    //                                   decoration: BoxDecoration(
+                    //                                     color: Colors.green,
+                    //                                     borderRadius:
+                    //                                         BorderRadius.circular(
+                    //                                             50),
+                    //                                   ),
+                    //                                   child: Text(
+                    //                                     unseenCount.toString(),
+                    //                                     style: TextStyle(
+                    //                                       color: Colors.white,
+                    //                                       fontSize: 10.sp,
+                    //                                     ),
+                    //                                   ),
+                    //                                 ),
+                    //                               SizedBox(
+                    //                                 height: 5.h,
+                    //                               ),
+                    //                               Text(
+                    //                                 getFormattedTime(chat['time'],
+                    //                                     format: 'hh:mm a'),
+                    //                                 style: TextStyle(
+                    //                                   fontSize: 12.sp,
+                    //                                   color: Colors.black
+                    //                                       .withOpacity(.6),
+                    //                                 ),
+                    //                               ),
+                    //                             ],
+                    //                           ),
+                    //                         ),
+                    //                       );
+                    //                     },
+                    //                   );
+                    //                 },
+                    //               ),
+                    //             ],
+                    //           );
+                    //         } catch (e) {
+                    //           return Center(child: Text('Failed to load chats.'));
+                    //         }
+                    //       } else {
+                    //         return Center(
+                    //           child: Text(
+                    //             'No Interactions yet',
+                    //             style: TextStyle(
+                    //                 fontSize: 20.sp, color: Colors.black),
+                    //           ),
+                    //         );
+                    //       }
+                    //     },
+                    //   )
+
+                    //                   StreamBuilder<QuerySnapshot>(
+                    //   stream: FirebaseFirestore.instance.collection('chat').snapshots(),
+                    //   builder: (context, snapshot) {
+                    //     if (!snapshot.hasData) {
+                    //       return Center(child: CircularProgressIndicator());
+                    //     }
+
+                    //     try {
+                    //       // Filter chats for current user
+                    //       var chatlist = snapshot.data!.docs.where((element) {
+                    //         final data = element.data() as Map<String, dynamic>?;
+                    //         return data?['chatId']?.contains(currentUserId) ?? false;
+                    //       }).toList();
+
+                    //       // Create AI chat entry
+                    //       final aiChatDoc = {
+                    //         'chatId': 'ai-chat-$currentUserId',
+                    //         'receiverId': 'gemini-ai-id',
+                    //         'receiverName': 'Tourz AI Assistant',
+                    //         'receiverPhoto': 'https://example.com/ai_avatar.png', // Add your AI image URL
+                    //         'time': 0, // Pinned timestamp
+                    //         'isAI': true,
+                    //         'message': 'Ask me anything about tours!' // Default message
+                    //       };
+
+                    //       // Merge and sort chats
+                    //       final allChats = [...chatlist, aiChatDoc];
+                    //       allChats.sort((a, b) {
+                    //         if (a['isAI'] == true) return -1;
+                    //         if (b['isAI'] == true) return 1;
+                    //         return (b['time'] ?? 0).compareTo(a['time'] ?? 0);
+                    //       });
+
+                    //       return ListView.builder(
+                    //         shrinkWrap: true,
+                    //         physics: NeverScrollableScrollPhysics(),
+                    //         itemCount: allChats.length,
+                    //         itemBuilder: (context, index) {
+                    //           final chat = allChats[index];
+                    //           final isAI = chat['isAI'] == true;
+                    //           final chatId = chat['chatId'];
+
+                    //           return FutureBuilder<int>(
+                    //             future: isAI ? Future.value(0) : _getUnseenMessageCount(chatId),
+                    //             builder: (context, snapshot) {
+                    //               int unseenCount = snapshot.data ?? 0;
+
+                    //               return Card(
+                    //                 shape: RoundedRectangleBorder(
+                    //                   borderRadius: BorderRadius.circular(5),
+                    //                 color: Colors.white,
+                    //                 child: ListTile(
+                    //                   onTap: () async {
+                    //                     if (isAI) {
+                    //                       // Create AI chat document if not exists
+                    //                       await FirebaseFirestore.instance.collection('chat')
+                    //                         .doc(chatId)
+                    //                         .set(chat, SetOptions(merge: true));
+                    //                     }
+                    //                     await _markMessagesAsSeen(chatId);
+
+                    //                     Navigator.push(
+                    //                       context,
+                    //                       MaterialPageRoute(
+                    //                         builder: (_) => SinglChatScreen(
+                    //                           receiverId: chat['receiverId'],
+                    //                           receiverName: chat['receiverName'],
+                    //                           receiverPhoto: chat['receiverPhoto'],
+                    //                           chatId: chatId,
+                    //                         ),
+                    //                       ),
+                    //                     );
+                    //                   },
+                    //                   leading: CircleAvatar(
+                    //                     child: profileImage(
+                    //                       profilePic: chat['receiverPhoto']?.isNotEmpty == true
+                    //                           ? chat['receiverPhoto']
+                    //                           : 'assets/default_ai.png', // Add default AI image
+                    //                       size: 50.r,
+                    //                     ),
+                    //                   ),
+                    //                   title: Text(
+                    //                     chat['receiverName'],
+                    //                     style: TextStyle(fontSize: 18.sp),
+                    //                   ),
+                    //                   subtitle: Text(
+                    //                     chat['message'].length > 20
+                    //                         ? chat['message'].substring(0, 20) + '...'
+                    //                         : chat['message'],
+                    //                     style: TextStyle(
+                    //                       color: Colors.black.withOpacity(.6),
+                    //                   ),
+                    //                   trailing: Column(
+                    //                     mainAxisAlignment: MainAxisAlignment.center,
+                    //                     children: [
+                    //                       if (unseenCount > 0 && !isAI)
+                    //                         Container(
+                    //                           padding: EdgeInsets.symmetric(
+                    //                               horizontal: 6, vertical: 3),
+                    //                           decoration: BoxDecoration(
+                    //                             color: Colors.green,
+                    //                             borderRadius: BorderRadius.circular(50),
+                    //                           ),
+                    //                           child: Text(
+                    //                             unseenCount.toString(),
+                    //                             style: TextStyle(
+                    //                               color: Colors.white,
+                    //                               fontSize: 10.sp),
+                    //                           ),
+                    //                         ),
+                    //                       SizedBox(height: 5.h),
+                    //                       Text(
+                    //                         getFormattedTime(
+                    //                             chat['time'] ?? 0,
+                    //                             format: 'hh:mm a'),
+                    //                         style: TextStyle(
+                    //                           fontSize: 12.sp,
+                    //                           color: Colors.black.withOpacity(.6)),
+                    //                       ),
+                    //                     ],
+                    //                   ),
+                    //                 ),
+                    //               );
+                    //             },
+                    //           );
+                    //         },
+                    //       );
+                    //     } catch (e) {
+                    //       return Center(child: Text('Failed to load chats.'));
+                    //     }
+                    //   },
+                    // )
+                    StreamBuilder<QuerySnapshot>(
+                        stream: FirebaseFirestore.instance
+                            .collection('chat')
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData) {
+                            return Center(child: CircularProgressIndicator());
+                          }
+
                           try {
-                            var chatlist = snapshot.data!.docs.where((element) {
-                              // Check if 'chatId' exists and is valid
-                              final data =
-                                  element.data() as Map<String, dynamic>?;
-                              final chatId = data?['chatId'] as String?;
-                              return chatId != null &&
-                                  chatId.contains(currentUserId);
-                            }).toList();
-                            // var chatlist = snapshot.data!.docs.where((element) {
-                            //   print('starter one');
-                            //   String chatId = element['chatId'];
-                            //   print('end one');
-                            //   return chatId.contains(currentUserId);
-                            // }).toList();
-                            chatlist.sort((a, b) {
-                              int timestampA = a['time'] ??
-                                  0; // Use 0 as fallback for null timestamps
-                              int timestampB = b['time'] ??
-                                  0; // Use 0 as fallback for null timestamps
-                              return timestampB.compareTo(
-                                  timestampA); // Sort in descending order (newest first)
-                            });
+                            // Process Firestore documents with type safety
+                            final chatlist = snapshot.data!.docs
+                                .map((doc) {
+                                  final data =
+                                      doc.data() as Map<String, dynamic>;
+                                  return {
+                                    'chatId': data['chatId'] as String? ?? '',
+                                    'receiverId':
+                                        data['receiverId'] as String? ?? '',
+                                    'receiverName':
+                                        data['receiverName'] as String? ??
+                                            'Unknown',
+                                    'receiverPhoto':
+                                        data['receiverPhoto'] as String? ?? '',
+                                    'time': data['time'] as int? ?? 0,
+                                    'message': data['message'] as String? ??
+                                        'No messages',
+                                    // 'isAI': false,
+                                    'isAI': data['receiverId'] ==
+                                        'gemini-ai-id', // 🔹 Identify AI chat
+                                  };
+                                })
+                                .where((chat) => (chat['chatId'] as String)
+                                    .contains(currentUserId))
+                                .toList();
+
+                            // Add AI chat entry with proper typing
+                            final aiChatDoc = {
+                              'chatId': 'ai-chat-$currentUserId',
+                              'receiverId': 'gemini-ai-id',
+                              'receiverName': 'FAMZY AI',
+                              'receiverPhoto':
+                                  'https://assets.lummi.ai/assets/QmTiN4tEYqeq9rGB6G2BtczQqusMgwyXsWyZUK2C8atjDf?auto=format&w=640',
+                              'time': 0,
+                              'message': 'Ask me anything about tours!',
+                              'isAI': true,
+                            };
+                            // 🔹 Remove AI Chat if it exists in Firestore chatlist
+                            chatlist
+                                .removeWhere((chat) => chat['isAI'] == true);
+                            // 🔹 Ensure AI Chat appears at the top
+                            final allChats = [aiChatDoc, ...chatlist];
+
+                            // 🔹 Sort only the user chats (AI chat remains at the top)
+                            allChats.sublist(1).sort((a, b) =>
+                                (b['time'] as int).compareTo(a['time'] as int));
 
                             return ListView.builder(
-                              itemCount: chatlist.length,
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: allChats.length,
                               itemBuilder: (context, index) {
-                                var chat = chatlist[index];
-                                String chatId = chat['chatId'];
+                                final chat = allChats[index];
+                                final isAI = chat['isAI'] as bool;
+                                final chatId = chat['chatId'] as String;
 
                                 return FutureBuilder<int>(
-                                  future: _getUnseenMessageCount(chatId),
+                                  future: isAI
+                                      ? Future.value(0)
+                                      : _getUnseenMessageCount(chatId),
                                   builder: (context, snapshot) {
-                                    int unseenCount = snapshot.data ?? 0;
+                                    final unseenCount = snapshot.data ?? 0;
 
                                     return Card(
                                       shape: RoundedRectangleBorder(
@@ -579,51 +932,65 @@ class _ChatListScreenState extends State<ChatListScreen> {
                                       color: Colors.white,
                                       child: ListTile(
                                         onTap: () async {
-                                          // Mark messages as seen when the chat is opened
+                                          if (isAI) {
+                                            await FirebaseFirestore.instance
+                                                .collection('chat')
+                                                .doc(chatId)
+                                                .set(chat,
+                                                    SetOptions(merge: true));
+                                          }
                                           await _markMessagesAsSeen(chatId);
 
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                               builder: (_) => SinglChatScreen(
-                                                receiverId: chat['receiverId'],
+                                                receiverId: chat['receiverId']
+                                                    as String,
                                                 receiverName:
-                                                    chat['receiverName'],
+                                                    chat['receiverName']
+                                                        as String,
                                                 receiverPhoto:
-                                                    chat['receiverPhoto'],
-                                                chatId: chat['chatId'],
+                                                    chat['receiverPhoto']
+                                                        as String,
+                                                chatId: chatId,
                                               ),
                                             ),
                                           );
                                         },
                                         leading: CircleAvatar(
+                                          backgroundColor: Color.fromARGB(
+                                              255, 245, 255, 245),
                                           child: profileImage(
-                                            profilePic: chat['receiverPhoto'],
+                                            profilePic:
+                                                chat['receiverPhoto'] as String,
                                             size: 50.r,
                                           ),
                                         ),
                                         title: Text(
-                                          chat['receiverName'],
+                                          chat['receiverName'] as String,
                                           style: TextStyle(fontSize: 18.sp),
                                         ),
                                         subtitle: Text(
-                                          chat['message'].length > 20
-                                              ? chat['message']
-                                                      .substring(0, 20) +
-                                                  '...'
-                                              : chat['message'],
+                                          (chat['message'] as String).length >
+                                                  20
+                                              ? '${(chat['message'] as String).substring(0, 20)}...'
+                                              : chat['message'] as String,
                                           style: TextStyle(
-                                            color: Colors.black.withOpacity(.6),
+                                            color:
+                                                Colors.black.withOpacity(0.6),
                                           ),
                                         ),
                                         trailing: Column(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: [
-                                            if (unseenCount > 0)
+                                            if (unseenCount > 0 && !isAI)
                                               Container(
                                                 padding: EdgeInsets.symmetric(
-                                                    horizontal: 6, vertical: 3),
+                                                  horizontal: 6.w,
+                                                  vertical: 3.h,
+                                                ),
                                                 decoration: BoxDecoration(
                                                   color: Colors.green,
                                                   borderRadius:
@@ -637,16 +1004,16 @@ class _ChatListScreenState extends State<ChatListScreen> {
                                                   ),
                                                 ),
                                               ),
-                                            SizedBox(
-                                              height: 5.h,
-                                            ),
+                                            SizedBox(height: 5.h),
                                             Text(
-                                              getFormattedTime(chat['time'],
-                                                  format: 'hh:mm a'),
+                                              getFormattedTime(
+                                                chat['time'] as int,
+                                                format: 'hh:mm a',
+                                              ),
                                               style: TextStyle(
                                                 fontSize: 12.sp,
                                                 color: Colors.black
-                                                    .withOpacity(.6),
+                                                    .withOpacity(0.6),
                                               ),
                                             ),
                                           ],
@@ -658,94 +1025,82 @@ class _ChatListScreenState extends State<ChatListScreen> {
                               },
                             );
                           } catch (e) {
-                            return Center(child: Text('Failed to load chats.'));
-                          }
-                        } else {
-                          return Center(
-                            child: Text(
-                              'No Interactions yet',
-                              style: TextStyle(
-                                  fontSize: 20.sp, color: Colors.black),
-                            ),
-                          );
-                        }
-                      },
-                    )
-                  : StreamBuilder<QuerySnapshot>(
-                      stream: FirebaseFirestore.instance
-                          .collection('UserDetails')
-                          .where('fullName',
-                              isGreaterThanOrEqualTo: searchQuery)
-                          .where('fullName', isLessThan: '${searchQuery}z')
-                          .snapshots(),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return Center(child: CircularProgressIndicator());
-                        }
-                        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                          return Center(child: Text("No users found"));
-                        }
-
-                        return ListView(
-                          children: snapshot.data!.docs.map((doc) {
-                            Map<String, dynamic> userData =
-                                doc.data() as Map<String, dynamic>;
-
-                            return ListTile(
-                              leading: CircleAvatar(
-                                child: profileImage(
-                                  profilePic: userData['photoURL'],
-                                  size: 50.r,
+                            return Center(
+                              child: Text(
+                                'Failed to load chats',
+                                style: TextStyle(
+                                  fontSize: 16.sp,
+                                  color: Colors.black54,
                                 ),
                               ),
-                              title: Text(userData['fullName'] ?? "Unknown"),
-                              trailing: TextButton(
-                                onPressed: () {
-                                  List<String> ids = [
-                                    currentUserId,
-                                    userData['userId']
-                                  ];
-                                  ids.sort();
-                                  String chatId = ids.join("_");
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => SinglChatScreen(
-                                        chatId: chatId,
-                                        receiverId: userData['userId'],
-                                        receiverName: userData['fullName'],
-                                        receiverPhoto: userData['photoURL'],
-                                      ),
-                                    ),
-                                  );
-                                },
-                                child: Text("Message"),
-                              ),
                             );
-                          }).toList(),
-                        );
-                      },
-                    ),
-            ),
-          ],
+                          }
+                        },
+                      )
+                    : StreamBuilder<QuerySnapshot>(
+                        stream: FirebaseFirestore.instance
+                            .collection('UserDetails')
+                            .where('fullName',
+                                isGreaterThanOrEqualTo: searchQuery)
+                            .where('fullName', isLessThan: '${searchQuery}z')
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Center(child: CircularProgressIndicator());
+                          }
+                          if (!snapshot.hasData ||
+                              snapshot.data!.docs.isEmpty) {
+                            return Center(child: Text("No users found"));
+                          }
+
+                          return ListView(
+                            children: snapshot.data!.docs.map((doc) {
+                              Map<String, dynamic> userData =
+                                  doc.data() as Map<String, dynamic>;
+
+                              return ListTile(
+                                leading: CircleAvatar(
+                                  child: profileImage(
+                                    profilePic: userData['photoURL'],
+                                    size: 50.r,
+                                  ),
+                                ),
+                                title: Text(userData['fullName'] ?? "Unknown"),
+                                trailing: TextButton(
+                                  onPressed: () {
+                                    List<String> ids = [
+                                      currentUserId,
+                                      userData['userId']
+                                    ];
+                                    ids.sort();
+                                    String chatId = ids.join("_");
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => SinglChatScreen(
+                                          chatId: chatId,
+                                          receiverId: userData['userId'],
+                                          receiverName: userData['fullName'],
+                                          receiverPhoto: userData['photoURL'],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: Text("Message"),
+                                ),
+                              );
+                            }).toList(),
+                          );
+                        },
+                      ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
-
-  // Get the count of unseen messages for a chat
-  // Future<int> _getUnseenMessageCount(String chatId) async {
-  //   final snapshot = await FirebaseFirestore.instance
-  //       .collection('chat')
-  //       .doc(chatId)
-  //       .collection('conversation')
-  //       .where('seen', isEqualTo: false)
-  //       .where('senderId', isNotEqualTo: currentUserId)
-  //       .get();
-
-  //   return snapshot.docs.length;
-  // }
 
   Future<int> _getUnseenMessageCount(String chatId) async {
     try {
@@ -767,22 +1122,6 @@ class _ChatListScreenState extends State<ChatListScreen> {
       return 0; // Return 0 in case of an error
     }
   }
-
-//   // Mark all messages in a chat as seen
-//   Future<void> _markMessagesAsSeen(String chatId) async {
-//     final snapshot = await FirebaseFirestore.instance
-//         .collection('chat')
-//         .doc(chatId)
-//         .collection('messages')
-//         .where('seen', isEqualTo: false)
-//         .where('senderId', isNotEqualTo: currentUserId)
-//         .get();
-
-//     for (var doc in snapshot.docs) {
-//       await doc.reference.update({'seen': true});
-//     }
-//   }
-// }
 
   Future<void> _markMessagesAsSeen(String chatId) async {
     try {
