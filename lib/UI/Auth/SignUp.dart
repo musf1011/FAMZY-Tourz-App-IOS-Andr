@@ -401,14 +401,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:famzy_tourz_app/UI/Auth/SignIn.dart';
 import 'package:famzy_tourz_app/UI/Auth/WelcomeScreen.dart';
-import 'package:famzy_tourz_app/UI/MainScreens/MainScreen.dart';
+import 'package:famzy_tourz_app/UI/Auth/email_verify.dart';
 import 'package:famzy_tourz_app/Utilities/CustElevButt.dart';
 import 'package:famzy_tourz_app/Utilities/CustTFField.dart';
 import 'package:famzy_tourz_app/Utilities/GoogleSignIn.dart';
 import 'package:famzy_tourz_app/Utilities/ToastPopUp.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -470,7 +474,7 @@ class _SignUpState extends State<SignUp> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(top: 8.h, bottom: 10.h),
+                      padding: EdgeInsets.only(top: 8.h),
                       child: Image.asset(
                         "asset/images/FAMZYLogo.png",
                         width: .8.sw,
@@ -480,11 +484,20 @@ class _SignUpState extends State<SignUp> {
                   ],
                 ),
               ),
+              Text(
+                "Sign Up",
+                textAlign: TextAlign.center,
+                style: GoogleFonts.playfairDisplay(
+                  fontSize: 40.sp,
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(255, 0, 57, 2),
+                ),
+              ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: .03.sw),
                 child: Container(
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
+                      borderRadius: BorderRadius.circular(15.r),
                       color: const Color.fromARGB(50, 0, 30, 0)),
                   child: Form(
                     key: keyOfForm,
@@ -509,6 +522,9 @@ class _SignUpState extends State<SignUp> {
                               }
                             },
                           ),
+                          SizedBox(
+                            height: 10.h,
+                          ),
                           CustTextFormField(
                             label: 'G-Mail',
                             hint: 'you@gmail.com',
@@ -523,6 +539,9 @@ class _SignUpState extends State<SignUp> {
                             onSaved: (value) {
                               gm = value;
                             },
+                          ),
+                          SizedBox(
+                            height: 10.h,
                           ),
                           CustTextFormField(
                             label: 'Password',
@@ -545,6 +564,9 @@ class _SignUpState extends State<SignUp> {
                               });
                             },
                           ),
+                          SizedBox(
+                            height: 10.h,
+                          ),
                           CustTextFormField(
                             label: 'Confirm Password',
                             hint: 'password',
@@ -554,11 +576,9 @@ class _SignUpState extends State<SignUp> {
                             validator: (value) {
                               if (value!.isEmpty) {
                                 return 'Confirm your password as well';
-                              }
-                              // else if (value != pw) {
-                              //   return 'Passwords do not match';
-                              // }
-                              else {
+                              } else if (cpw != pw) {
+                                return 'Passwords do not match';
+                              } else {
                                 return null;
                               }
                             },
@@ -570,14 +590,20 @@ class _SignUpState extends State<SignUp> {
                               });
                             },
                           ),
+                          SizedBox(
+                            height: 10.h,
+                          ),
                           Row(
                             children: [
                               SizedBox(
                                 width: .5.sw,
                                 child: CustTextFormField(
+                                  keyboardType: TextInputType.number,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly
+                                  ],
                                   label: 'Age',
                                   hint: '18',
-                                  keyboardType: TextInputType.number,
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
                                       return 'Please enter your age';
@@ -614,9 +640,9 @@ class _SignUpState extends State<SignUp> {
                                         style: TextStyle(color: Colors.white),
                                       ),
                                       fillColor: Colors.white,
-                                      hintText: 'Gender',
-                                      hintStyle:
-                                          const TextStyle(color: Colors.white),
+                                      hintText: 'Not Selected',
+                                      hintStyle: TextStyle(
+                                          color: Colors.grey, fontSize: 14.sp),
                                       enabledBorder: UnderlineInputBorder(
                                         borderSide: BorderSide(
                                           color: Colors.grey,
@@ -631,6 +657,7 @@ class _SignUpState extends State<SignUp> {
                                         ),
                                       ),
                                     ),
+                                    borderRadius: BorderRadius.circular(15.r),
                                     dropdownColor:
                                         const Color.fromARGB(180, 0, 30, 0),
                                     value: selectedGender,
@@ -653,6 +680,14 @@ class _SignUpState extends State<SignUp> {
                                                   255, 255, 109, 157)),
                                         ),
                                       ),
+                                      DropdownMenuItem(
+                                        value: 'other',
+                                        child: const Text(
+                                          'other',
+                                          style:
+                                              TextStyle(color: Colors.yellow),
+                                        ),
+                                      ),
                                     ],
                                     onChanged: (String? newValue) {
                                       setState(() {
@@ -673,12 +708,10 @@ class _SignUpState extends State<SignUp> {
                   ),
                 ),
               ),
-              SizedBox(height: .022.sh),
+              SizedBox(height: .018.sh),
               CustomElevatedButton(
                 child: isLoading
-                    ? const CircularProgressIndicator(
-                        color: Colors.white,
-                      )
+                    ? const SpinKitFadingCircle(color: Colors.yellow, size: 70)
                     : Text(
                         'SIGN UP',
                         style: TextStyle(fontSize: 18.sp, color: Colors.white),
@@ -705,37 +738,46 @@ class _SignUpState extends State<SignUp> {
                           .set({
                         'fullName': fn!.trim(),
                         'email': gm!.trim(),
-                        // 'password': pw!.trim(),
                         'createdAt': FieldValue.serverTimestamp(),
                         'age': age,
                         'gender': selectedGender,
                         'userId': userCredential.user!.uid,
                         'photoURL': ''
                       });
+                      //stor if user is looged in local DataBase
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      await prefs.setBool('isLoggedIn', true);
 
-                      ToastPopUp()
-                          .toastPopUp('Sign Up Successful', Colors.black);
+                      // Send verificate email
+                      await userCredential.user!.sendEmailVerification();
 
-                      // Navigate to main screen after saving data
+                      ToastPopUp().toastPopUp(
+                        'Verification email sent to ${gm!.trim()}',
+                        Colors.black,
+                      );
+
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const MainScreen()),
+                          builder: (context) =>
+                              const EmailVerificationPendingScreen(),
+                        ),
                       );
+                      // Only reset the form if navigation was successful
+                      keyOfForm.currentState!.reset();
                     } catch (error) {
                       ToastPopUp().toastPopUp(error.toString(), Colors.black);
                     } finally {
                       setState(() {
                         isLoading = false;
                       });
-
-                      keyOfForm.currentState!.reset();
                     }
                   }
                 },
               ),
               Text(
-                "\n\n\nOr continue with \n\n\t\t\t\t\t\t\t\t\t",
+                "\nOr continue with \n\n\t\t\t\t\t\t\t\t\t",
                 style: TextStyle(
                   color: const Color.fromARGB(255, 230, 230, 230),
                   fontSize: 12.sp,
@@ -753,7 +795,7 @@ class _SignUpState extends State<SignUp> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "\nAlready have an account?",
+                    "Already have an account?",
                     style: TextStyle(color: Colors.white, fontSize: 12.sp),
                   ),
                   const SizedBox(width: 8.0),
@@ -765,7 +807,7 @@ class _SignUpState extends State<SignUp> {
                               builder: (context) => const SignIn()));
                     },
                     child: const Text(
-                      '\nLog In',
+                      'Log In',
                       style: TextStyle(
                           color: Colors.white, fontWeight: FontWeight.bold),
                     ),

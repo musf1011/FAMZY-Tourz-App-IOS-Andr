@@ -28,10 +28,10 @@ class CustomElevatedButton extends StatelessWidget {
           width: 1.0,
         ),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(25),
+          borderRadius: BorderRadius.circular(20.r),
         ),
       ),
-      child: child, // Use the widget here
+      child: child,
     );
   }
 }

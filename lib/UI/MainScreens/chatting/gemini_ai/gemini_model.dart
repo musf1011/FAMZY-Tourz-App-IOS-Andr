@@ -122,8 +122,6 @@
 // }
 
 // gemini_ai_service.dart
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 
 class GeminiAIService {
@@ -152,20 +150,4 @@ class GeminiAIService {
   }
 
   // Add this method to your existing chat screen
-  Future<void> sendAIMessage(String chatId, String message) async {
-    final aiResponse = await generateResponse(message);
-
-    await FirebaseFirestore.instance
-        .collection('chat')
-        .doc(chatId)
-        .collection('conversation')
-        .add({
-      'senderId': 'gemini-ai', // Special ID for AI messages
-      'receiverId': FirebaseAuth.instance.currentUser!.uid,
-      'message': aiResponse,
-      'time': DateTime.now().millisecondsSinceEpoch,
-      'seen': true,
-      'isAI': true // New field to identify AI messages
-    });
-  }
 }

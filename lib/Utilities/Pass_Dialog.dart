@@ -14,10 +14,10 @@ void showDeleteAccountDialog(BuildContext context) {
       providerData.any((info) => info.providerId == "google.com");
 
   if (isGoogleUser) {
-    // 🔹 If Google user, delete without asking for a password
+    // If Google user, delete without asking for a password
     deleteUserAccount(context, isGoogleUser: true);
   } else {
-    // 🔹 If Email/Password user, ask for password before deleting
+    // If Email/Password user, ask for password before deleting
     TextEditingController passwordController = TextEditingController();
 
     showDialog(
@@ -71,7 +71,7 @@ Future<void> deleteUserAccount(BuildContext context,
     User? user = FirebaseAuth.instance.currentUser;
     String uid = user!.uid;
 
-    // 🔹 Step 1: Re-authenticate user
+    // Step 1: Re-authenticate user
     if (isGoogleUser) {
       // Re-authenticate Google user
       final GoogleSignIn googleSignIn = GoogleSignIn();
@@ -96,18 +96,18 @@ Future<void> deleteUserAccount(BuildContext context,
       print("Email/Password re-authentication successful!");
     }
 
-    // 🔹 Step 2: Delete Firestore document first (to avoid permission issues)
+    // Step 2: Delete Firestore document first (to avoid permission issues)
     await FirebaseFirestore.instance
         .collection('UserDetails')
         .doc(uid)
         .delete();
     print("Firestore document deleted successfully!");
 
-    // 🔹 Step 3: Delete Firebase user account
+    // Step 3: Delete Firebase user account
     await user.delete();
     print("User deleted from Firebase Auth!");
 
-    // 🔹 Step 4: Navigate to WelcomeScreen after successful deletion
+    // Step 4: Navigate to WelcomeScreen after successful deletion
 
     Navigator.pushReplacement(
       context,

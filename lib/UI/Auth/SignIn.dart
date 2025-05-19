@@ -1,5 +1,6 @@
 import 'package:famzy_tourz_app/UI/Auth/SignUp.dart';
 import 'package:famzy_tourz_app/UI/Auth/WelcomeScreen.dart';
+import 'package:famzy_tourz_app/UI/Auth/enter_email_for_reset_screen.dart';
 import 'package:famzy_tourz_app/UI/MainScreens/MainScreen.dart';
 import 'package:famzy_tourz_app/Utilities/CustElevButt.dart';
 import 'package:famzy_tourz_app/Utilities/CustTFField.dart';
@@ -8,6 +9,9 @@ import 'package:famzy_tourz_app/Utilities/ToastPopUp.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({super.key});
@@ -43,7 +47,7 @@ class _SignInState extends State<SignIn> {
           child: Column(
             children: [
               Padding(
-                padding: EdgeInsets.only(top: 20),
+                padding: EdgeInsets.only(top: 15.h),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -72,19 +76,25 @@ class _SignInState extends State<SignIn> {
                   ],
                 ),
               ),
-              SizedBox(
-                height: .04.sh,
+              Text(
+                "Sign In",
+                textAlign: TextAlign.center,
+                style: GoogleFonts.playfairDisplay(
+                  fontSize: 40.sp,
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(255, 0, 57, 2),
+                ),
               ),
               Padding(
                   padding: EdgeInsets.symmetric(horizontal: .03.sw),
                   child: Container(
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
+                        borderRadius: BorderRadius.circular(15.r),
                         color: const Color.fromARGB(50, 0, 30, 0)),
                     child: Form(
                       key: keyOfForm,
                       child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: .1.sw),
+                        padding: EdgeInsets.symmetric(horizontal: .02.sw),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -131,12 +141,21 @@ class _SignInState extends State<SignIn> {
                             SizedBox(height: 0.01.sh),
                             Align(
                               alignment: Alignment.centerRight,
-                              child: Text(
-                                'Forgot password?',
-                                style: TextStyle(
-                                    color: const Color.fromARGB(
-                                        250, 200, 200, 200),
-                                    fontSize: 12.sp),
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              EnterEmailForResetScreen()));
+                                },
+                                child: Text(
+                                  'Forgot password?',
+                                  style: TextStyle(
+                                      color: const Color.fromARGB(
+                                          250, 200, 200, 200),
+                                      fontSize: 12.sp),
+                                ),
                               ),
                             ),
                             SizedBox(
@@ -153,9 +172,7 @@ class _SignInState extends State<SignIn> {
               SizedBox(height: .025.sh),
               CustomElevatedButton(
                 child: isLoading == true
-                    ? const CircularProgressIndicator(
-                        color: Colors.white,
-                      )
+                    ? SpinKitFadingCircle(color: Colors.yellow, size: 70)
                     : Text(
                         'SIGN IN',
                         style: TextStyle(fontSize: 18.sp, color: Colors.white),
@@ -172,7 +189,12 @@ class _SignInState extends State<SignIn> {
                       email: g!.trim(),
                       password: p!.trim(),
                     )
-                        .then((Value) {
+                        .then((Value) async {
+                      //locally store user is logged in
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      await prefs.setBool('isLoggedIn', true);
+
                       Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
@@ -182,7 +204,7 @@ class _SignInState extends State<SignIn> {
                           .toastPopUp('Sign In Successful', Colors.black);
                       keyOfForm.currentState!.reset();
                     }).onError((Error, Value) {
-                      ToastPopUp().toastPopUp(Error.toString(), Colors.black);
+                      ToastPopUp().toastPopUp(Error.toString(), Colors.red);
                       setState(() {
                         isLoading = false;
                       });
@@ -204,8 +226,8 @@ class _SignInState extends State<SignIn> {
               Text('Google'),
               IconButton(
                 icon: Image.asset(
-                  'asset/logos/google_logo.png', // Add your Google logo image to assets
-                  height: 40.h, // Adjust size as needed
+                  'asset/logos/google_logo.png',
+                  height: 40.h,
                 ),
                 onPressed: () => _authService.signInWithGoogle(context),
               ),

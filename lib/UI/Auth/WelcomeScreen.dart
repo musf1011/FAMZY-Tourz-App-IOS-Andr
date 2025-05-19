@@ -50,7 +50,7 @@ class WelcomeScreen extends StatelessWidget {
                 CustomElevatedButton(
                   child: Text("Sign In"),
                   onPressed: () {
-                    Navigator.push(
+                    Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                             builder: (context) => const SignIn()));
@@ -60,7 +60,7 @@ class WelcomeScreen extends StatelessWidget {
                 CustomElevatedButton(
                   child: Text("Sign Up"),
                   onPressed: () {
-                    Navigator.push(
+                    Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                             builder: (context) => const SignUp()));

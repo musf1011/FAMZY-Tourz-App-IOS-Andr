@@ -50,10 +50,25 @@ dependencies:
   water_drop_nav_bar: ^2.2.2
   google_generative_ai: ^0.4.6
   http: ^1.3.0
+  json_annotation: ^4.9.0
+  timezone: ^0.10.0
+  flutter_markdown: ^0.6.18
+  flutter_spinkit: ^5.2.1
+  lottie: ^3.2.0
+  accessible_text_span: ^2.0.0
+  shared_preferences: ^2.5.3
+  firebase_storage: ^12.4.5
+  share_plus: ^11.0.0
+  
+  # google_maps_flutter: ^2.2.1
+  # google_api_headers: ^1.0.4
 
 dev_dependencies:
+  build_runner: ^2.4.5
+  json_serializable: ^6.7.1
   flutter_test:
     sdk: flutter
+    
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -76,6 +91,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - asset/images/bg-conversation.jpg
+    - asset/images/bg-conversation1.jpg
     - asset/images/bg-chats.jpg
     - asset/images/elianna-gill-AnqA_W26zEM-unsplash.jpg
     - asset/images/FAMZYLogo.png
@@ -85,6 +101,8 @@ flutter:
     - asset/images/met2.jpeg
     - asset/images/met3.jpeg
     - asset/images/met4.jpeg
+    - asset/animations/error.json
+    - asset/animations/success.json
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 

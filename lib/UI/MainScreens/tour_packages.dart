@@ -1,6 +1,9 @@
+import 'package:famzy_tourz_app/UI/MainScreens/tour_packages/ai_insights.dart';
+import 'package:famzy_tourz_app/UI/MainScreens/tour_packages/package_screen.dart';
 import 'package:famzy_tourz_app/Utilities/CustElevButt.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class TourPackages extends StatelessWidget {
   TourPackages({super.key});
@@ -19,6 +22,20 @@ class TourPackages extends StatelessWidget {
     '  Kaghan: This picturesque valley \n  offers  breathtaking views, trekking\n  opportunities,  and vibrant flora and\n  fauna.',
     '  Dir: A hidden gem of the north, Dir\n  boasts serene landscapes, historical\n  forts, and captivating mountain trails.',
     '  Chitral: Home to the Kalash Valley,\n  Chitral is known for its unique culture,\n  majestic peaks, and the annual\n  Shandur Polo Festival.'
+  ];
+  final List Latitude = [
+    35.2227,
+    34.9093,
+    34.7794,
+    35.2012,
+    35.8540,
+  ];
+  final List Longitude = [
+    72.4258,
+    73.6507,
+    73.5270,
+    71.8755,
+    71.7866,
   ];
   @override
   Widget build(BuildContext context) {
@@ -50,19 +67,57 @@ class TourPackages extends StatelessWidget {
                       height: 0.05.sh,
                     ),
                     SizedBox(
-                      width: 0.5.sw,
-                      height: .065.sh,
+                      width: 0.6.sw,
+                      height: .085.sh,
                       child: CustomElevatedButton(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            Text(destinations[index]),
-                            Icon(Icons.double_arrow_sharp)
+                            Text(
+                              destinations[index],
+                              style:
+                                  GoogleFonts.playfairDisplay(fontSize: 35.sp),
+                            ),
+                            Icon(
+                              Icons.double_arrow_sharp,
+                              size: 30.h,
+                            )
                           ],
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => PackageScreen(
+                                        latitude: Latitude[index],
+                                        longitude: Longitude[index],
+                                        bgImage: imagesList[index],
+                                        destination: destinations[index],
+                                      )));
+                        },
                       ),
-                    )
+                    ),
+                    SizedBox(
+                      height: 0.02.sh,
+                    ),
+                    SizedBox(
+                      height: 0.05.sh,
+                      width: 0.35.sw,
+                      child: CustomElevatedButton(
+                          child: Text('AI Insights',
+                              style: TextStyle(fontSize: 14.sp)),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => AiInsights(
+                                  destination: destinations[index],
+                                  bgImage: imagesList[index],
+                                ),
+                              ),
+                            );
+                          }),
+                    ),
                   ],
                 ),
                 Padding(

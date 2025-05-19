@@ -7,7 +7,9 @@ import 'package:famzy_tourz_app/Utilities/prof_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -192,17 +194,55 @@ class _ProfileState extends State<Profile> {
                   width: .5.sw,
                   child: CustomElevatedButton(
                     child: Icon(Icons.logout),
-                    onPressed: () {
-                      _auth.signOut().then((value) {
+                    onPressed: () async {
+                      try {
+                        // Sign out from Firebase (safe for all auth types)
+                        await FirebaseAuth.instance.signOut();
+
+                        // Try Google sign-out only if session exists
+                        final googleSignIn = GoogleSignIn();
+                        final isSignedIn = await googleSignIn.isSignedIn();
+                        if (isSignedIn) {
+                          try {
+                            await googleSignIn.signOut();
+                            await googleSignIn.disconnect();
+                          } catch (e) {
+                            debugPrint(
+                                "Google SignOut Error: $e"); // log but don't stop flow
+                          }
+                        }
+
+                        //log out status saved in local database
+                        SharedPreferences prefs =
+                            await SharedPreferences.getInstance();
+                        await prefs.setBool('isLoggedIn', false);
+                        await prefs.setBool('isEmailVerified', false);
+
+                        // ✅ Always navigate after Firebase logout
                         Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => WelcomeScreen()));
-                      }).onError((Error, value) {
-                        ToastPopUp().toastPopUp(Error.toString(), Colors.amber);
-                      });
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => WelcomeScreen()),
+                        );
+                      } catch (error) {
+                        ToastPopUp().toastPopUp(error.toString(), Colors.amber);
+                      }
                     },
                   ),
+
+                  // CustomElevatedButton(
+                  //   child: Icon(Icons.logout),
+                  //   onPressed: () {
+                  //     _auth.signOut().then((value) {
+                  //       Navigator.pushReplacement(
+                  //           context,
+                  //           MaterialPageRoute(
+                  //               builder: (context) => WelcomeScreen()));
+                  //     }).onError((Error, value) {
+                  //       ToastPopUp().toastPopUp(Error.toString(), Colors.amber);
+                  //     });
+                  //   },
+                  // ),
                 ),
                 SizedBox(
                   height: 20.h,
