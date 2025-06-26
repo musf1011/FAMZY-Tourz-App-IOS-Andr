@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "855046420378",
+    "project_id": "famzy-tourz-app",
+    "storage_bucket": "famzy-tourz-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:855046420378:android:6655db7f3bf0f1b9eeec23",
+        "android_client_info": {
+          "package_name": "com.example.famzy_tourz_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "855046420378-2u4jk89chq3lqvncidgfnltl2e8s0bk1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.famzy_tourz_app",
+            "certificate_hash": "a6ae109fb35f6dae48dd80b22403d081b01932c5"
+          }
+        },
+        {
+          "client_id": "855046420378-3c6uvvtnovtnttqn0lpa73eqblm0efv0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.famzy_tourz_app",
+            "certificate_hash": "6b08284eac15c9ef5780ae7780cc87df58b73d5c"
+          }
+        },
+        {
+          "client_id": "855046420378-8v9kcrlfp0849kvue066p2acpumml4so.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAteoHeXo3rMS50u4K2_EB7Rc3ekBx4xTw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "855046420378-8v9kcrlfp0849kvue066p2acpumml4so.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "855046420378-dk9t26f4gpl911hj4oogllnnq2v5bnbp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.famzyTourzApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

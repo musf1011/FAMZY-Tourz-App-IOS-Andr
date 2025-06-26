@@ -1,0 +1,19 @@
+{"flutter":
+{"platforms":
+{"android":
+{"default":
+{"projectId":"famzy-tourz-app",
+"appId":"1:855046420378:android:6655db7f3bf0f1b9eeec23",
+"fileOutput":"android/app/google-services.json"}
+},
+"dart":{
+    "lib/firebase_options.dart":{
+        "projectId":"famzy-tourz-app","configurations":{
+            "android":"1:855046420378:android:6655db7f3bf0f1b9eeec23",
+            "ios":"1:855046420378:ios:ba2f63940510c1f2eeec23"
+        }
+    }
+  }
+     }
+            }
+        }
