@@ -4,6 +4,7 @@ import 'package:famzy_tourz_app/UI/MainScreens/MainScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -44,12 +45,18 @@ class AuthService {
             'age': null,
             'createdAt': FieldValue.serverTimestamp(),
           });
+          //locally store user is logged in
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setBool('isLoggedIn', true);
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
                 builder: (context) => AdditionalInfoScreen(user: user)),
           );
         } else {
+          //locally store user is logged in
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setBool('isLoggedIn', true);
           Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (context) => MainScreen()));
         }

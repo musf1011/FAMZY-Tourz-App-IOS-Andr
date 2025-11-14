@@ -1,6 +1,7 @@
 import 'package:famzy_tourz_app/UI/MainScreens/tour_packages/passenger_info.dart';
 import 'package:famzy_tourz_app/Utilities/CustElevButt.dart';
 import 'package:famzy_tourz_app/Utilities/info_row.dart';
+import 'package:famzy_tourz_app/contstants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -23,7 +24,14 @@ class BookingScreen extends StatefulWidget {
 
 class _BookingScreenState extends State<BookingScreen> {
   int seatCount = 1;
+  late int pricePerSeat;
+  @override
+  void initState() {
+    super.initState();
+    pricePerSeat = int.parse(widget.packageDetails['price'] ?? 0);
+  }
 
+  int get totalPrice => seatCount * pricePerSeat;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,7 +59,7 @@ class _BookingScreenState extends State<BookingScreen> {
                     child: Icon(
                       Icons.arrow_circle_left_outlined,
                       size: 40.h,
-                      color: const Color.fromARGB(180, 0, 30, 0),
+                      color: AppConstants.transGColor,
                     ),
                   ),
                   SizedBox(width: .15.sw),
@@ -70,13 +78,13 @@ class _BookingScreenState extends State<BookingScreen> {
                 style: GoogleFonts.playfairDisplay(
                     fontSize: 40.sp,
                     fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(255, 0, 57, 2),
+                    color: AppConstants.primaryColor,
                     background: Paint()..color = Colors.white30),
               ),
               Container(
                 padding: EdgeInsets.all(12.w),
                 decoration: BoxDecoration(
-                  color: const Color.fromARGB(150, 0, 30, 0),
+                  color: AppConstants.transGColor,
                   borderRadius: BorderRadius.circular(12.r),
                 ),
                 child: Column(
@@ -109,7 +117,7 @@ class _BookingScreenState extends State<BookingScreen> {
                       widget.packageDetails['description'] ?? '',
                       style: GoogleFonts.poppins(
                         fontSize: 16.sp,
-                        color: Colors.white.withOpacity(0.9),
+                        color: AppConstants.whiteColorP9,
                       ),
                       textAlign: TextAlign.justify,
                     ),
@@ -133,7 +141,7 @@ class _BookingScreenState extends State<BookingScreen> {
                       "• You must follow all safety guidelines during the tour.",
                       style: GoogleFonts.poppins(
                         fontSize: 14.sp,
-                        color: Colors.white.withOpacity(0.85),
+                        color: AppConstants.whiteColorP9,
                       ),
                       textAlign: TextAlign.left,
                     ),
@@ -144,12 +152,9 @@ class _BookingScreenState extends State<BookingScreen> {
               Container(
                 width: 0.5.sw,
                 decoration: BoxDecoration(
-                  color: const Color.fromARGB(150, 0, 30, 0),
+                  color: AppConstants.transGColor,
                   borderRadius: BorderRadius.circular(25.r),
-                  border: Border.all(
-                    color: Colors.white,
-                    width: 2.w,
-                  ),
+                  border: Border.all(color: Colors.white, width: 2.w),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -164,7 +169,8 @@ class _BookingScreenState extends State<BookingScreen> {
                           setState(() => seatCount--);
                         }
                       },
-                      icon: Icon(Icons.remove_circle, color: Colors.redAccent),
+                      icon: const Icon(Icons.remove_circle,
+                          color: Colors.redAccent),
                     ),
                     Text('$seatCount',
                         style: GoogleFonts.roboto(
@@ -175,14 +181,15 @@ class _BookingScreenState extends State<BookingScreen> {
                           setState(() => seatCount++);
                         }
                       },
-                      icon: Icon(Icons.add_circle, color: Colors.greenAccent),
+                      icon: const Icon(Icons.add_circle,
+                          color: AppConstants.tertiaryColor),
                     ),
                   ],
                 ),
               ),
               SizedBox(height: 30.h),
               Text(
-                "Price: ${widget.packageDetails['price'] * seatCount} PKR per person",
+                "Total Price: $totalPrice PKR",
                 style: GoogleFonts.roboto(
                   fontSize: 18.sp,
                   fontWeight: FontWeight.w600,
@@ -201,7 +208,6 @@ class _BookingScreenState extends State<BookingScreen> {
                           builder: (context) => PassengerInfoScreen(
                               destination: widget.destination,
                               bgImage: widget.bgImage,
-                              // tourId: widget.packageDetails['tourId'],
                               seatCount: seatCount,
                               packageDetails: widget.packageDetails)));
                 },

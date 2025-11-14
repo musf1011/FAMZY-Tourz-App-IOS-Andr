@@ -1,24 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:famzy_tourz_app/UI/Auth/WelcomeScreen.dart';
 import 'package:famzy_tourz_app/Utilities/CustElevButt.dart';
 import 'package:famzy_tourz_app/Utilities/Pass_Dialog.dart';
-import 'package:famzy_tourz_app/Utilities/ToastPopUp.dart';
+import 'package:famzy_tourz_app/Utilities/auth_services.dart';
 import 'package:famzy_tourz_app/Utilities/prof_image.dart';
+import 'package:famzy_tourz_app/contstants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-class Profile extends StatefulWidget {
-  const Profile({super.key});
+class Settings extends StatefulWidget {
+  const Settings({super.key});
 
   @override
-  State<Profile> createState() => _ProfileState();
+  State<Settings> createState() => _ProfileState();
 }
 
-class _ProfileState extends State<Profile> {
+class _ProfileState extends State<Settings> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -27,23 +25,31 @@ class _ProfileState extends State<Profile> {
     final String currentUserId = _auth.currentUser!.uid;
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: AppConstants.primaryColor,
+        iconTheme: IconThemeData(color: AppConstants.whiteColorP5),
+        title: Text(
+          'Settings',
+          style: AppConstants.appBarTextStyle,
+        ),
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
             // Top container for profile info
             Container(
               width: 1.sw,
-              height: 0.36.sh, // Fixed height
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
+              height: 0.3.sh,
+              decoration: BoxDecoration(
+                gradient: RadialGradient(
                   colors: [
-                    Color.fromARGB(150, 0, 30, 0),
-                    Color.fromARGB(255, 0, 57, 2)
+                    AppConstants.secondaryColor,
+                    AppConstants.primaryColor
                   ],
                 ),
               ),
               child: SizedBox(
-                height: 100.h, // Dynamic height for the container
+                height: 50.h,
                 child: StreamBuilder<DocumentSnapshot>(
                   stream: _firestore
                       .collection('UserDetails')
@@ -53,7 +59,7 @@ class _ProfileState extends State<Profile> {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return Center(
                           child: CircularProgressIndicator(
-                        color: const Color.fromARGB(255, 0, 57, 2),
+                        color: Colors.yellow,
                       ));
                     }
 
@@ -84,12 +90,11 @@ class _ProfileState extends State<Profile> {
                       children: [
                         SizedBox(height: 20.h),
                         CircleAvatar(
-                          maxRadius: 50.r, // Dynamic radius
-                          backgroundColor: Colors.grey
-                              .shade200, // Optional: Background color for better visuals
+                          maxRadius: 50.r,
+                          backgroundColor: Colors.grey.shade200,
                           child: profileImage(
                             profilePic: profilePic,
-                            size: 100.r, // Dynamic size
+                            size: 100.r,
                           ),
                         ),
                         SizedBox(
@@ -99,7 +104,7 @@ class _ProfileState extends State<Profile> {
                           fullName,
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 28.sp, // Dynamic font size
+                            fontSize: 28.sp,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -108,7 +113,7 @@ class _ProfileState extends State<Profile> {
                           email,
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 18.sp, // Dynamic font size
+                            fontSize: 18.sp,
                           ),
                         ),
                         Text('since $createdTime')
@@ -121,8 +126,7 @@ class _ProfileState extends State<Profile> {
             // Bottom container for account details
             SizedBox(
               width: 1.sw,
-              height: 0.6.sh, // Fixed height
-              // color: Colors.black,
+              height: 0.6.sh,
               child: StreamBuilder<DocumentSnapshot>(
                 stream: _firestore
                     .collection('UserDetails')
@@ -193,56 +197,8 @@ class _ProfileState extends State<Profile> {
                   height: 40.h,
                   width: .5.sw,
                   child: CustomElevatedButton(
-                    child: Icon(Icons.logout),
-                    onPressed: () async {
-                      try {
-                        // Sign out from Firebase (safe for all auth types)
-                        await FirebaseAuth.instance.signOut();
-
-                        // Try Google sign-out only if session exists
-                        final googleSignIn = GoogleSignIn();
-                        final isSignedIn = await googleSignIn.isSignedIn();
-                        if (isSignedIn) {
-                          try {
-                            await googleSignIn.signOut();
-                            await googleSignIn.disconnect();
-                          } catch (e) {
-                            debugPrint(
-                                "Google SignOut Error: $e"); // log but don't stop flow
-                          }
-                        }
-
-                        //log out status saved in local database
-                        SharedPreferences prefs =
-                            await SharedPreferences.getInstance();
-                        await prefs.setBool('isLoggedIn', false);
-                        await prefs.setBool('isEmailVerified', false);
-
-                        // ✅ Always navigate after Firebase logout
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => WelcomeScreen()),
-                        );
-                      } catch (error) {
-                        ToastPopUp().toastPopUp(error.toString(), Colors.amber);
-                      }
-                    },
-                  ),
-
-                  // CustomElevatedButton(
-                  //   child: Icon(Icons.logout),
-                  //   onPressed: () {
-                  //     _auth.signOut().then((value) {
-                  //       Navigator.pushReplacement(
-                  //           context,
-                  //           MaterialPageRoute(
-                  //               builder: (context) => WelcomeScreen()));
-                  //     }).onError((Error, value) {
-                  //       ToastPopUp().toastPopUp(Error.toString(), Colors.amber);
-                  //     });
-                  //   },
-                  // ),
+                      child: Icon(Icons.logout),
+                      onPressed: () => AuthServices.signOut(context)),
                 ),
                 SizedBox(
                   height: 20.h,
@@ -255,15 +211,6 @@ class _ProfileState extends State<Profile> {
                     onPressed: () {
                       showDeleteAccountDialog(context);
                     },
-
-                    // onPressed: () {
-                    //   _auth.currentUser!.delete().then((value) {
-                    //     Navigator.pushReplacement(
-                    //         context,
-                    //         MaterialPageRoute(
-                    //             builder: (context) => WelcomeScreen()));
-                    //   });
-                    // },
                   ),
                 )
               ],

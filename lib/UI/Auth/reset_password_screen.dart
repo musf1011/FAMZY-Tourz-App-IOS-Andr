@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:famzy_tourz_app/Utilities/CustElevButt.dart';
 import 'package:famzy_tourz_app/Utilities/CustTFField.dart';
 import 'package:famzy_tourz_app/Utilities/ToastPopUp.dart';
@@ -18,7 +17,6 @@ class ResetPasswordScreen extends StatefulWidget {
 
 class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   String? newPassword;

@@ -1,9 +1,9 @@
-// Created by: Famzy Tourz
-
+// Created by: Famzy CodeWorks
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:famzy_tourz_app/UI/MainScreens/chatting/conversation_screen.dart';
 import 'package:famzy_tourz_app/Utilities/prof_image.dart';
 import 'package:famzy_tourz_app/Utilities/time_formatter.dart';
+import 'package:famzy_tourz_app/contstants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -31,7 +31,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
       child: Scaffold(
         backgroundColor: Colors.grey[200],
         appBar: AppBar(
-          automaticallyImplyLeading: false, // Add this line
+          automaticallyImplyLeading: false,
           title: Text(
             "\tInteracts",
             textAlign: TextAlign.center,
@@ -41,7 +41,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
               color: Colors.white,
             ),
           ),
-          backgroundColor: const Color.fromARGB(255, 0, 57, 2),
+          backgroundColor: AppConstants.primaryColor,
         ),
         body: Container(
           decoration: BoxDecoration(
@@ -56,27 +56,24 @@ class _ChatListScreenState extends State<ChatListScreen> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextField(
-                  cursorColor: const Color.fromARGB(255, 0, 57, 2),
+                  cursorColor: AppConstants.primaryColor,
                   style: TextStyle(color: Colors.black),
                   controller: searchController,
                   decoration: InputDecoration(
-                    hoverColor: const Color.fromARGB(255, 0, 57, 2),
+                    hoverColor: AppConstants.primaryColor,
                     labelText: "Search by Name",
-                    labelStyle:
-                        TextStyle(color: const Color.fromARGB(255, 0, 57, 2)),
+                    labelStyle: TextStyle(color: AppConstants.primaryColor),
                     prefixIcon: Icon(
                       Icons.search,
-                      color: const Color.fromARGB(255, 0, 57, 2),
+                      color: AppConstants.primaryColor,
                     ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(25),
-                      borderSide: BorderSide(
-                          color: const Color.fromARGB(255, 0, 57, 2)),
+                      borderSide: BorderSide(color: AppConstants.primaryColor),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
-                      borderSide: BorderSide(
-                          color: const Color.fromARGB(255, 0, 57, 2)),
+                      borderSide: BorderSide(color: AppConstants.primaryColor),
                     ),
                   ),
                   onChanged: (value) {
@@ -103,32 +100,6 @@ class _ChatListScreenState extends State<ChatListScreen> {
                           }
 
                           try {
-                            // Process Firestore documents with type safety
-                            // final chatlist = snapshot.data!.docs
-                            //     .map((doc) {
-                            //       final data =
-                            //           doc.data() as Map<String, dynamic>;
-                            //       return {
-                            //         'chatId': data['chatId'] as String? ?? '',
-                            //         'receiverId':
-                            //             data['receiverId'] as String? ?? '',
-                            //         'receiverName':
-                            //             data['receiverName'] as String? ??
-                            //                 'Unknown',
-                            //         'receiverPhoto':
-                            //             data['receiverPhoto'] as String? ?? '',
-                            //         'time': data['time'] as int? ?? 0,
-                            //         'message': data['message'] as String? ??
-                            //             'No messages',
-                            //         // 'isAI': false,
-                            //         'isAI': data['receiverId'] ==
-                            //             'gemini-ai-id', // 🔹 Identify AI chat
-                            //       };
-                            //     })
-                            //     .where((chat) => (chat['chatId'] as String)
-                            //         .contains(currentUserId))
-                            //     .toList();
-
                             final chatlist = snapshot.data!.docs
                                 .map((doc) {
                                   final data =
@@ -245,8 +216,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
                                               ? '${(chat['message'] as String).substring(0, 20)}...'
                                               : chat['message'] as String,
                                           style: TextStyle(
-                                            color:
-                                                Colors.black.withOpacity(0.6),
+                                            color: AppConstants.blackColorP7,
                                           ),
                                         ),
                                         trailing: Column(
@@ -260,7 +230,8 @@ class _ChatListScreenState extends State<ChatListScreen> {
                                                   vertical: 3.h,
                                                 ),
                                                 decoration: BoxDecoration(
-                                                  color: Colors.green,
+                                                  color: AppConstants
+                                                      .secondaryColor,
                                                   borderRadius:
                                                       BorderRadius.circular(50),
                                                 ),
@@ -280,8 +251,8 @@ class _ChatListScreenState extends State<ChatListScreen> {
                                               ),
                                               style: TextStyle(
                                                 fontSize: 12.sp,
-                                                color: Colors.black
-                                                    .withOpacity(0.6),
+                                                color:
+                                                    AppConstants.blackColorP7,
                                               ),
                                             ),
                                           ],
@@ -387,7 +358,6 @@ class _ChatListScreenState extends State<ChatListScreen> {
       // Return the count of unread messages
       return snapshot.docs.length;
     } catch (e) {
-      print('Error fetching unread messages: $e');
       return 0; // Return 0 in case of an error
     }
   }
@@ -408,7 +378,6 @@ class _ChatListScreenState extends State<ChatListScreen> {
         await doc.reference.update({'seen': true});
       }
     } catch (e) {
-      print('Error marking messages as seen: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to mark messages as seen: $e')),
       );

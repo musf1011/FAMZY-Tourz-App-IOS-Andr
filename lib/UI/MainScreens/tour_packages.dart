@@ -1,6 +1,7 @@
 import 'package:famzy_tourz_app/UI/MainScreens/tour_packages/ai_insights.dart';
 import 'package:famzy_tourz_app/UI/MainScreens/tour_packages/package_screen.dart';
 import 'package:famzy_tourz_app/Utilities/CustElevButt.dart';
+import 'package:famzy_tourz_app/contstants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -120,6 +121,7 @@ class TourPackages extends StatelessWidget {
                     ),
                   ],
                 ),
+                //page slider
                 Padding(
                   padding: EdgeInsets.only(top: 0.1.sh, right: 0.05.sw),
                   child: Column(
@@ -135,7 +137,7 @@ class TourPackages extends StatelessWidget {
                               // color: Color.fromARGB(255, 0, 57, 2),
                               color: index != indexDots
                                   ? Color.fromARGB(150, 0, 100, 0)
-                                  : Color.fromARGB(255, 0, 57, 2)),
+                                  : AppConstants.primaryColor),
                         ),
                       )),
                 )

@@ -1,4 +1,4 @@
-// lib/UI/MainScreens/weather/open_meteo_model.dart
+// created by FAMZY CodeWorks
 import 'package:json_annotation/json_annotation.dart';
 
 part 'open_meteo_model.g.dart';

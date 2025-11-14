@@ -100,36 +100,6 @@ class _AiInsightsState extends State<AiInsights> {
                     }
                     final response = snapshot.data ?? 'No Insights available';
 
-                    //   return Padding(
-                    //     padding: EdgeInsets.all(10.w),
-                    //     child: Container(
-                    //       padding: EdgeInsets.all(12.w),
-                    //       decoration: BoxDecoration(
-                    //         color: const Color.fromARGB(150, 0, 30, 0),
-                    //         borderRadius: BorderRadius.circular(12.r),
-                    //       ),
-                    //       child: MarkdownBody(
-                    //         data: response,
-                    //         styleSheet: MarkdownStyleSheet(
-                    //           p: GoogleFonts.poppins(
-                    //             fontSize: 16.sp,
-                    //             color: Colors.white.withOpacity(0.9),
-                    //             fontWeight: FontWeight.w400,
-                    //             height: 1.4,
-                    //           ),
-                    //           strong: GoogleFonts.poppins(
-                    //             fontSize: 16.sp,
-                    //             fontWeight: FontWeight.bold,
-                    //             color: Colors.white,
-                    //           ),
-                    //           listBullet: GoogleFonts.poppins(
-                    //             fontSize: 16.sp,
-                    //             color: Colors.white.withOpacity(0.9),
-                    //           ),
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   );
                     return Padding(
                       padding: EdgeInsets.all(10.w),
                       child: Container(

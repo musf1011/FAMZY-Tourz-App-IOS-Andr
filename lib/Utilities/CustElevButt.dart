@@ -1,8 +1,9 @@
+import 'package:famzy_tourz_app/contstants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomElevatedButton extends StatelessWidget {
-  final Widget child; // Accept a widget instead of a string label
+  final Widget child;
   final VoidCallback onPressed;
 
   const CustomElevatedButton({
@@ -16,7 +17,7 @@ class CustomElevatedButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor: const Color.fromARGB(150, 0, 30, 0),
+        backgroundColor: AppConstants.transGColor,
         foregroundColor: Colors.white,
         minimumSize: Size(0.75.sw, .075.sh),
         textStyle: TextStyle(

@@ -1,4 +1,5 @@
 import 'package:famzy_tourz_app/Utilities/prof_image.dart';
+import 'package:famzy_tourz_app/contstants.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -64,21 +65,14 @@ class _CommentsScreenState extends State<CommentsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          "Comments",
-          textAlign: TextAlign.center,
-          style: GoogleFonts.philosopher(
-            fontWeight: FontWeight.bold,
-            fontSize: 25.sp,
-            color: Colors.white,
-          ),
-        ),
+        title: Text("Comments",
+            textAlign: TextAlign.center, style: AppConstants.appBarTextStyle),
         leading: GestureDetector(
           onTap: () => Navigator.pop(context),
           child: Icon(Icons.arrow_circle_left_outlined,
               size: 35.h, color: Colors.white),
         ),
-        backgroundColor: const Color.fromARGB(150, 0, 30, 0),
+        backgroundColor: AppConstants.primaryColor,
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -178,9 +172,6 @@ class _CommentTile extends StatelessWidget {
           CircleAvatar(
             radius: 20.r,
             child: profileImage(profilePic: userImage!, size: 50.r),
-            // backgroundImage: profi
-            //     userImage != null ? NetworkImage(userImage!) : null,
-            // child: userImage == null ? Icon(Icons.person) : null,
           ),
           SizedBox(width: 12.w),
           Expanded(
@@ -237,7 +228,6 @@ class _CommentInputField extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(8.w),
       decoration: BoxDecoration(
-        // color: Colors.white,
         boxShadow: [
           BoxShadow(
             color: Colors.black12,
@@ -249,30 +239,34 @@ class _CommentInputField extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
+              child: Theme(
+            data: AppConstants.customSelectionTheme,
             child: TextField(
               controller: controller,
+              style: TextStyle(color: AppConstants.secondaryColor),
               decoration: const InputDecoration(
                 hintText: 'Enter message',
-                hintStyle: TextStyle(color: Color.fromARGB(255, 0, 57, 2)),
+                hintStyle: TextStyle(color: AppConstants.transGColor),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(25)),
-                  borderSide: BorderSide(color: Color.fromARGB(150, 0, 100, 0)),
+                  borderSide: BorderSide(color: AppConstants.primaryColor),
                 ),
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Color.fromARGB(255, 0, 57, 2)),
+                  borderSide: BorderSide(color: AppConstants.primaryColor),
                   borderRadius: BorderRadius.all(Radius.circular(50)),
                 ),
               ),
-              cursorColor: const Color.fromARGB(255, 0, 57, 2),
+              // Correctly sets the cursor ("pointer") color
+              cursorColor: AppConstants.secondaryColor,
               maxLines: 3,
               minLines: 1,
             ),
-          ),
+          )),
           SizedBox(width: 8.w),
           IconButton(
             icon: Icon(
               Icons.send,
-              color: Color.fromARGB(255, 0, 57, 2),
+              color: AppConstants.primaryColor,
               size: 35.r,
             ),
             onPressed: onPressed,

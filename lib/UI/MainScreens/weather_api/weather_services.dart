@@ -1,8 +1,7 @@
-// lib/UI/MainScreens/weather/open_meteo_service.dart
+//created by FAMZY CodeWorks
 import 'dart:convert';
 import 'package:famzy_tourz_app/UI/MainScreens/weather_api/open_meteo_model.dart';
 import 'package:http/http.dart' as http;
-// import 'open_meteo_model.dart';
 
 class OpenMeteoService {
   static const String _baseUrl = 'https://api.open-meteo.com/v1/forecast';
@@ -21,11 +20,6 @@ class OpenMeteoService {
     }
   }
 }
-
-
-
-
-
 
 // // lib/UI/MainScreens/weather/open_meteo_model.dart
 // import 'package:json_annotation/json_annotation.dart';

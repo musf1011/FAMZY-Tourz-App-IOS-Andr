@@ -189,7 +189,7 @@ class _SignInState extends State<SignIn> {
                       email: g!.trim(),
                       password: p!.trim(),
                     )
-                        .then((Value) async {
+                        .then((value) async {
                       //locally store user is logged in
                       SharedPreferences prefs =
                           await SharedPreferences.getInstance();
@@ -203,8 +203,8 @@ class _SignInState extends State<SignIn> {
                       ToastPopUp()
                           .toastPopUp('Sign In Successful', Colors.black);
                       keyOfForm.currentState!.reset();
-                    }).onError((Error, Value) {
-                      ToastPopUp().toastPopUp(Error.toString(), Colors.red);
+                    }).onError((error, value) {
+                      ToastPopUp().toastPopUp(error.toString(), Colors.red);
                       setState(() {
                         isLoading = false;
                       });
